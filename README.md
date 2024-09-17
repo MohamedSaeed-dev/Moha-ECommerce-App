@@ -3,14 +3,17 @@
 ### Web app project is developed to simulate the functionalities of real-world ecommerce web apps. ⚡🛒
 
 ## Technologies ⚙️
-1- React.js (Javascript) 
-2- Express.js (Typescript)
-3- MongoDB 🌱
-4- Prisma (ORM)
+- React.js (Javascript) 
+- Express.js (Typescript)
+- MongoDB 🌱
+- Prisma (ORM)
 
 ## Features 🪶
-1- Friendly user interface 👤
-2- Authentication & Authorization 🔐
+- Friendly user interface 👤
+- Authentication & Authorization 🔐
+- Handling orders 🛒
+- favorite products ❤️
+- a lot more.. ✨
 
 
 ## License
