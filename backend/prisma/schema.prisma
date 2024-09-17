@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  username         String             @unique
+  email            String             @unique
+  phone            String             @unique
+  password         String
+  isBlocked        Boolean            @default(false)
+  imgUrl           String             @default("")
+  role             Role               @default(GUEST)
+  Order            Order[]
+  Cart             Cart[]
+  FavoriteProducts FavoriteProducts[]
+}
+
+enum Role {
+  ADMIN
+  USER
+  GUEST
+}
+
+model Category {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  categoryName String    @unique
+  Products     Product[]
+}
+
+model Product {
+  id                 String            @id @default(auto()) @map("_id") @db.ObjectId
+  productName        String
+  quantity           String            @default("1")
+  price              String            @default("0")
+  discount           String            @default("")
+  newPrice           String            @default("")
+  description        String            @default("")
+  imgUrl             String            @default("")
+  Category           Category          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId         String            @db.ObjectId
+  CartItem           CartItem[]
+  FavoriteProducts   FavoriteProducts? @relation(fields: [favoriteProductsId], references: [id], onDelete: Cascade)
+  favoriteProductsId String?           @db.ObjectId
+}
+
+model Order {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  orderDate DateTime @default(now())
+  cartId    String
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @db.ObjectId
+}
+
+model Cart {
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  User       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String     @db.ObjectId
+  CartItem   CartItem[]
+}
+
+model CartItem {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  cartId    String  @db.ObjectId
+  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String  @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  String  @default("1")
+}
+
+model FavoriteProducts {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String    @db.ObjectId
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products Product[]
+}
